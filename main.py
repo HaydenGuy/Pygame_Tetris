@@ -10,9 +10,24 @@ def main():
     width, height = 800, 800
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption("Tetris")
+    
+    # Colors
+    BLACK = (0, 0, 0)
+    WHITE = (255, 255, 255)
 
-    # Background color
-    bg_color = (0, 0, 0)
+    # Calculate 95% of the screen width and height
+    border_width = int(0.95 * width)
+    border_height = int(0.95 * height)
+
+    border_scale = (10, 20)
+
+    # Width and height to fit the scale
+    border_width = min(border_width, border_height * border_scale[0] // border_scale[1])
+    border_height = min(border_height, border_width * border_scale[1] // border_scale[0])
+
+    # Position to center the border
+    border_x = (width - border_width) / 2
+    border_y = (height - border_height) / 2
 
     # Font
     font = pygame.font.Font(None, 36)
@@ -27,8 +42,11 @@ def main():
                 pygame.quit()
                 sys.exit()
 
-        # Fill the background color
-        screen.fill(bg_color)
+        # Background color
+        screen.fill(WHITE)
+
+        # Draw the border
+        pygame.draw.rect(screen, BLACK, (border_x, border_y, border_width, border_height), 3)
 
         # Update display
         pygame.display.flip()
