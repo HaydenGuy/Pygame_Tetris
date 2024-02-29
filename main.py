@@ -8,6 +8,9 @@ class Draw_Square(pygame.sprite.Sprite):
         self.image.fill(color)
         self.rect = self.image.get_rect()
 
+    def move_down(self):
+        self.rect.y += 40
+
 def draw_border(width, height):
     # Calculate 95% of the screen width and height
     border_width = int(0.95 * width)
@@ -54,11 +57,21 @@ def main():
     red_square.rect.y = (height - border_height) / 2 # Top of inside of border_y 
     all_sprites.add(red_square)
 
+    # Timer variables
+    move_timer = 0
+    move_interval = 1000
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # Exits game if user clicks quit
                 pygame.quit()
                 sys.exit()
+
+        # Check if it's time to move a piece down
+        current_time = pygame.time.get_ticks()
+        if current_time - move_timer > move_interval:
+            red_square.move_down()
+            move_timer = current_time # Reset the timer
 
         # Background color
         screen.fill(WHITE)
