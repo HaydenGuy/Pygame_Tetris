@@ -1,6 +1,13 @@
 import pygame
 import sys
 
+class Draw_Square(pygame.sprite.Sprite):
+    def __init__(self, color, width, height):
+        super().__init__()
+        self.image = pygame.Surface((width, height))
+        self.image.fill(color)
+        self.rect = self.image.get_rect()
+
 def draw_border(width, height):
     # Calculate 95% of the screen width and height
     border_width = int(0.95 * width)
@@ -27,6 +34,9 @@ def main():
     WHITE = (255, 255, 255)
     RED = (255, 0, 0)
 
+    # Font
+    font = pygame.font.Font(None, 36)
+
     # Set up display
     width, height = 800, 800
     screen = pygame.display.set_mode((width, height))
@@ -35,14 +45,14 @@ def main():
     # Set up border
     border_x, border_y, border_width, border_height = draw_border(width, height)
 
-    # Font
-    font = pygame.font.Font(None, 36)
+    # Sprite group
+    all_sprites = pygame.sprite.Group()
 
-    # # Sprites
-    # all_sprites = pygame.sprite.Group()
-    # placeholder_square = pygame.draw.rect(screen, RED, (0, 0, 50, 50))
-    # all_sprites.add(placeholder_square)
-
+    # Placeholder red square, add to sprite group
+    red_square = Draw_Square(RED, 50, 50)
+    red_square.rect.x = border_height / 2 # Center of border_x
+    red_square.rect.y = (height - border_height) / 2 # Top of inside of border_y 
+    all_sprites.add(red_square)
 
     while True:
         for event in pygame.event.get():
@@ -56,11 +66,11 @@ def main():
         # Draw the border
         pygame.draw.rect(screen, BLACK, (border_x, border_y, border_width, border_height), 3)
 
-        # # Update the sprites on screen
-        # all_sprites.update()
+        # Update the sprites on screen
+        all_sprites.update()
 
-        # # Draw sprites
-        # all_sprites.draw(screen)
+        # Draw sprites
+        all_sprites.draw(screen)
 
         # Update display
         pygame.display.flip()
