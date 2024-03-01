@@ -6,21 +6,23 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 class Piece(pygame.sprite.Sprite):
-    def __init__(self, spritesheet, x_sprite, y_sprite, x_pos, y_pos):
+    def __init__(self, spritesheet, x_sprite, y_sprite, x_pos, y_pos, index):
         super().__init__()
-        self.sprite = self.get_sprite(spritesheet, x_sprite, y_sprite, 0, 0) # Gets the sprite from the spritesheet,
+        self.sprite = self.get_sprite(spritesheet, x_sprite, y_sprite, 0, 0, index) # Gets the sprite from the spritesheet,
         self.image = self.sprite # Sets the image attribute to be self.sprite
         self.rect = self.image.get_rect(topleft=(x_pos, y_pos)) # Draws the sprite at x_pos, y_pos
 
     # Gets the sprite from the spritesheet
-    def get_sprite(self, spritesheet, width, height, x_coord, y_coord):
+    def get_sprite(self, spritesheet, width, height, x_coord, y_coord, index):
 
-        # Sets the surface to equal the width and height (128 x 128 in this case)
+        x_coord += width * index
+        
+        # Sets the surface to equal the width and height
         # Convert alpha to optimize the image and allow transparency
         image = pygame.Surface((width, height)).convert_alpha()
 
         # Blit copies a portion of the spritesheet onto the image surface
-        image.blit(spritesheet, (x_coord, y_coord))
+        image.blit(spritesheet, (0, 0), (x_coord, y_coord, width, height))
 
         # Keys the color from the spritesheet
         image.set_colorkey(WHITE)
@@ -69,9 +71,15 @@ def main():
     all_sprites = pygame.sprite.Group()
 
     # Create long piece (placeholder values for spawning)
-    long_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57)
+    # long_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 0)
+    Z_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 1)
+    # S_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 2)
+    # L_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 3)
+    # T_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 4)
+    # L_rev_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 5)
+    # square_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 6)
 
-    all_sprites.add(long_piece)
+    all_sprites.add(Z_piece)
 
     # Timer variables
     move_timer = 0
@@ -83,14 +91,14 @@ def main():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYUP and event.key == pygame.K_x:
-                long_piece.image = pygame.transform.rotate(long_piece.image, 90)
-                long_piece.image.set_colorkey(WHITE)
-                long_piece.rect = long_piece.image.get_rect(center=long_piece.rect.center)
+                Z_piece.image = pygame.transform.rotate(Z_piece.image, 90)
+                Z_piece.image.set_colorkey(WHITE)
+                Z_piece.rect = Z_piece.image.get_rect(center=Z_piece.rect.center)
 
         # Check if it's time to move a piece down
         current_time = pygame.time.get_ticks()
         if current_time - move_timer > move_interval:
-            long_piece.move_down()
+            Z_piece.move_down()
             move_timer = current_time # Reset the timer
 
         # Background color
