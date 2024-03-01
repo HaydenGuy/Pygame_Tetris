@@ -82,6 +82,10 @@ def main():
             if event.type == pygame.QUIT: # Exits game if user clicks quit
                 pygame.quit()
                 sys.exit()
+            if event.type == pygame.KEYUP and event.key == pygame.K_x:
+                long_piece.image = pygame.transform.rotate(long_piece.image, 90)
+                long_piece.image.set_colorkey(WHITE)
+                long_piece.rect = long_piece.image.get_rect(center=long_piece.rect.center)
 
         # Check if it's time to move a piece down
         current_time = pygame.time.get_ticks()
@@ -90,10 +94,10 @@ def main():
             move_timer = current_time # Reset the timer
 
         # Background color
-        screen.fill(WHITE)
+        screen.fill(BLACK)
 
         # Draw the border
-        pygame.draw.rect(screen, BLACK, (border_x, border_y, border_width, border_height), 3)
+        pygame.draw.rect(screen, WHITE, (border_x, border_y, border_width, border_height), 3)
 
         # Update the sprites on screen
         all_sprites.update()
