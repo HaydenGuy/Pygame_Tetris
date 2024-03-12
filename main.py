@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 
 # Colors
 BLACK = (0, 0, 0)
@@ -50,6 +51,21 @@ def draw_border(width, height):
 
     return border_x, border_y, border_width, border_height
 
+# Im not sure this is working correctly yet
+def random_piece(sprites_tuple, last_num):
+    rand_num = random.randint(0, 7)
+    if rand_num == last_num or rand_num == 7:
+        rand_num = random.randint(0, 7)
+        if rand_num == last_num:
+            return sprites_tuple(rand_num)
+        elif rand_num == 7:
+            while rand_num >= 7:
+                rand_num = random.randint(0, 7)
+            return sprites_tuple(rand_num)
+    else:
+        return sprites_tuple(rand_num)
+
+
 def main():
     # Initialize Pygame
     pygame.init()
@@ -65,22 +81,26 @@ def main():
     # Set up border
     border_x, border_y, border_width, border_height = draw_border(width, height)
 
-    spritesheet = pygame.image.load("Pygame_Tetris/sprites/spritesheet.png")
+    spritesheet = pygame.image.load("/home/linuxlaptop/Python/Pygame_Tetris/sprites/spritesheet.png")
 
     # Sprite group
     all_sprites = pygame.sprite.Group()
 
-    # Create long piece (placeholder values for spawning)
-    # long_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 0)
+    # Create each piece (spawning values are placeholder)
+    long_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 0)
     Z_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 1)
-    # S_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 2)
-    # L_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 3)
-    # T_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 4)
-    # L_rev_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 5)
-    # square_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 6)
+    S_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 2)
+    L_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 3)
+    T_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 4)
+    L_rev_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 5)
+    square_piece = Piece(spritesheet, 160, 120, border_height // 2.33 , (height - border_height) - 57, 6)
 
-    all_sprites.add(Z_piece)
-
+    # !!Work in progress to randomly choose a piece from this list and have it keep updating
+    sprites_tuple = (long_piece, Z_piece, S_piece, L_piece, T_piece, L_rev_piece, square_piece)
+    test = random_piece(sprites_tuple, 7)
+    print(test)
+    # ALSO REMOVED THE ALL_SPRITES GROUP
+    
     # Timer variables
     move_timer = 0
     move_interval = 1000
@@ -90,10 +110,10 @@ def main():
             if event.type == pygame.QUIT: # Exits game if user clicks quit
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.KEYUP and event.key == pygame.K_x:
-                Z_piece.image = pygame.transform.rotate(Z_piece.image, 90)
-                Z_piece.image.set_colorkey(WHITE)
-                Z_piece.rect = Z_piece.image.get_rect(center=Z_piece.rect.center)
+            # if event.type == pygame.KEYUP and event.key == pygame.K_x:
+            #     Z_piece.image = pygame.transform.rotate(Z_piece.image, 90)
+            #     Z_piece.image.set_colorkey(WHITE)
+            #     Z_piece.rect = Z_piece.image.get_rect(center=Z_piece.rect.center)
 
         # Check if it's time to move a piece down
         current_time = pygame.time.get_ticks()
@@ -109,7 +129,7 @@ def main():
 
         # Update the sprites on screen
         all_sprites.update()
-
+        
         # Draw sprites
         all_sprites.draw(screen)
 
