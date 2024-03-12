@@ -65,7 +65,7 @@ def main():
     # Set up border
     border_x, border_y, border_width, border_height = draw_border(width, height)
 
-    spritesheet = pygame.image.load("/mnt/32346261-2a77-4ea4-ad97-df46c23e0f72/Pygame/Tetris/sprites/spritesheet.png")
+    spritesheet = pygame.image.load("Pygame_Tetris/sprites/spritesheet.png")
 
     # Sprite group
     all_sprites = pygame.sprite.Group()
